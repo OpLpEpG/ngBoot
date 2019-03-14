@@ -2,22 +2,47 @@
   <h1>bootloader</h1>
   <form #userForm="ngForm">
 
-    {{userForm.value | json}}
+   <!-- <i style="color: red"> {{userForm.value | json}} </i>   -->
 
     <div class="form-group">
-      <label for="file1bor">borfilters</label>
-      <input type="file" 
-             class="form-control-file" 
-             name="file1bor" 
-             id="file1bor" 
-             placeholder="11" 
-             aria-describedby="fileHelpId"
-             [(ngModel)]="file">
-      <small id="fileHelpId" class="form-text text-muted">Help text</small>
-    </div>
+      <label for="fileBoot">File select (*.bin)</label>
+      <input type="file" class="form-control-file btn btn-light"  
+        [(ngModel)]="ecdecd" 
+        (change)="fileChangeEvent($event)"
+        name="fileBoot" 
+        id="IdfileBoot" 
+        placeholder="file select..." 
+        aria-describedby="fileHelpId">
+      <small id="fileHelpId" class="form-text text-muted">{{help_file}}</small>
+      <small class="form-text text-muted" for="metaData">meta data</small>
+      <textarea class="form-control" name="metaData" id="IdmetaData" rows="5"  [(ngModel)]="metatext"></textarea>
+      </div>    
 
+     <div class="form-group">
+        <label for="adr">address proc</label>
+        <input type="number"
+          class="form-control" name="adr" id="adr" aria-describedby="helpId" placeholder="{{adr}}"[(ngModel)]="ecdde">
+        <small id="helpId" class="form-text text-muted">set adr</small>
+      </div>
+   
+      <div class="form-group">
+        <label for="serial">serial</label>
+        <input type="number" [(ngModel)]="serial"
+          class="form-control" name="serial" id="serial" aria-describedby="serh" placeholder="1">
+        <small id="serh" class="form-text text-muted">SERIAL</small>
+      </div>
 
-    <button type="submit" class="btn btn-primary">Submit</button>
+      <div class="form-group">
+        <label for="chip">chip</label>
+        <select class="form-control" name="chip" id="chip">
+          <option>atmega8</option>
+          <option>atmega64</option>
+          <option>stm32F1</option>
+        </select>
+      </div>
+  
+
+    <button type="submit" class="btn btn-light">Submit</button>
 
   </form>
 </div>
