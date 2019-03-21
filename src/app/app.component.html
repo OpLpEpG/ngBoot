@@ -1,22 +1,27 @@
-<div class="container-fluid mb-5">
+    <app-rea-bot></app-rea-bot>
+
+
+<!-- <div class="container-fluid mb-5">
   <h1>bootloader</h1>
   <form #userForm="ngForm">
 
-   <!-- <i style="color: red"> {{userForm.value | json}} </i>   -->
+   <i style="color: red"> {{userForm.value | json}} </i>   -->
+        <!-- accept=".bin" -->
 
-    <div class="form-group">
+   <!--  <div class="form-group">
       <label for="fileBoot">File select (*.bin)</label>
-      <input type="file" class="form-control-file btn btn-light"  
-        [(ngModel)]="ecdecd" 
+      <input type="file"
+        class="form-control-file btn btn-light"
+        [(ngModel)]="ecdecd"
         (change)="fileChangeEvent($event)"
-        name="fileBoot" 
-        id="IdfileBoot" 
-        placeholder="file select..." 
+        name="fileBoot"
+        id="IdfileBoot"
+        placeholder="file select..."
         aria-describedby="fileHelpId">
       <small id="fileHelpId" class="form-text text-muted">{{help_file}}</small>
       <small class="form-text text-muted" for="metaData">meta data</small>
       <textarea class="form-control" name="metaData" id="IdmetaData" rows="5"  [(ngModel)]="metatext"></textarea>
-      </div>    
+      </div>
 
      <div class="form-group">
         <label for="adr">address proc</label>
@@ -24,7 +29,7 @@
           class="form-control" name="adr" id="adr" aria-describedby="helpId" placeholder="{{adr}}"[(ngModel)]="ecdde">
         <small id="helpId" class="form-text text-muted">set adr</small>
       </div>
-   
+
       <div class="form-group">
         <label for="serial">serial</label>
         <input type="number" [(ngModel)]="serial"
@@ -40,10 +45,10 @@
           <option>stm32F1</option>
         </select>
       </div>
-  
+
 
     <button type="submit" class="btn btn-light">Submit</button>
 
   </form>
 </div>
-
+ -->

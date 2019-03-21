@@ -11,22 +11,20 @@ export class AppComponent {
   metatext = 'metatext';
   help_file = 'свойства файла';
   adr = 3;
-  /**
-   * fileChangeEvent
-      event: any   
-  */
+  
   public fileChangeEvent(fileInput: any){
     if (fileInput.target.files && fileInput.target.files[0]) {
 
-      let f: File = fileInput.target.files[0];
-      this.help_file = `время файла: ${new Date(f.lastModified).toLocaleString()}
-                        размер файла: ${f.size}`;
+      let f: FileList = fileInput.target.files;
+      
+      this.help_file = `время файла: ${new Date(f[0].lastModified).toLocaleString()}
+                        размер файла: ${f[0].size}`;
 
       let reader = new FileReader();
 
-      reader.onload = ( e:any) => this.metatext = e.target.result;
+      reader.onload = (e:any) => this.metatext = e.target.result;
       
-      reader.readAsDataURL(f);
+      reader.readAsDataURL(f[0]);
   }
 }
 }
