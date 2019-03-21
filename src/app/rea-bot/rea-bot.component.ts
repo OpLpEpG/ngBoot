@@ -23,7 +23,7 @@ export class ReaBotComponent implements OnInit {
 
     bootFile: [ '' ],
      address:  [3],
-     // chipType: ['ATmega8', 'ATMega164', 'ATMega664', 'STM32F1', 'STM32F4'],
+     chipType: [ ['ATmega8', 'ATMega164', 'ATMega664', 'STM32F1', 'STM32F4'] ],
      serialNo: [1]
 
    });

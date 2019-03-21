@@ -54,6 +54,13 @@
           aria-valuemax="100">{{prWidth}}%</div>
       </div>
 
+      <div class="form-group">
+        <label for="chipType">Тип чипа</label>
+        <select class="form-control" formControlName="chipType" id="chipType">
+          <option *ngFor="let chipTypeitem of bootForm.controls['chipType']" [ngValue]="chipTypeitem">{{chipTypeitem}}</option>
+        </select>
+      </div>
+
     <!-- <select [formControl]="chipType" id ="chipType" ></select> -->
 
   <!-- <label for="email">email</label> -->
