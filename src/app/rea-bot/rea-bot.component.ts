@@ -14,7 +14,7 @@ export class ReaBotComponent implements OnInit {
   uploadInput: EventEmitter<any>;
   dragOver: boolean;
   div1 =  true ;
-  prWidth = 0;
+  prWidth = 80;
   public get prWidthst() {
     return `width: ${this.prWidth}%;`;
   }
