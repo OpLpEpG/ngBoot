@@ -2,3 +2,5 @@
   font-family: Verdana;
   color: rgba(31, 15, 241, 0.753);
 }
+input.ng-invalid {border:solid red 2px;}
+/* input.ng-touched.ng-valid {border:solid green 2px;} */

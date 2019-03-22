@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {EventEmitter } from '@angular/core';
-import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormArray, FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-rea-bot',
@@ -9,84 +9,69 @@ import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms'
 })
 export class ReaBotComponent implements OnInit {
 
-  formData: FormData;
-  files: File[];
-  uploadInput: EventEmitter<any>;
-  dragOver: boolean;
-  div1 =  true ;
-  prWidth = 80;
-  public get prWidthst() {
-    return `width: ${this.prWidth}%;`;
-  }
-
-  bootForm: FormGroup = this.fb.group({
-
-    bootFile: [ '' ],
-     address:  [3],
-     chipType: [ ['ATmega8', 'ATMega164', 'ATMega664', 'STM32F1', 'STM32F4'] ],
-     serialNo: [1]
-
-   });
+  public bootForm: FormGroup;
+  div1 =  true;
   bootFileHelp = 'bootFileHelp: string';
+  metatext: string;
+  progressName = 'pn';
+  get progress() {
+    return this.bootForm.controls.progressData.value;
+  }
+  set progress(val: number) {
+    if (this.progress !== val && val >= 0 && val <= 100) {
+      this.bootForm.controls.progressData.setValue(val);
+    }
+  }
 
 
   constructor(private fb: FormBuilder) {
-      this.files = [];
-      this.uploadInput = new EventEmitter<any>();
+      this.bootForm = fb.group({
+
+        bootFile: [ '',
+          [Validators.required]],
+
+        address:  [{value: 3, disabled: true},
+          [Validators.required,
+          Validators.min(1),
+          Validators.max(16)]],
+
+        serialNo: [{value: 1, disabled: false},
+          [Validators.required,
+          Validators.min(1),
+          Validators.max(0xFFFF)]],
+
+          progressData: [{value: 1, disabled: false},
+            [Validators.required,
+            Validators.min(0),
+            Validators.max(100)]],
+
+        chipType: [{value: 'ATmega8', disabled: true},
+          [Validators.required]],
+        chipTypeData: this.fb.array(['ATmega8', 'ATMega164', 'ATMega664', 'STM32F1', 'STM32F4']),
+      });
   }
-
-  showFiles() {
-      // let files = '';
-      // for (let i = 0; i < this.files.length; i ++) {
-      //   files += this.files[i].name;
-      //    if (!(this.files.length - 1 === i)) {
-      //      files += ',';
-      //   }
-      // }
-      // return files;
-   }
-
-  startUpload(): void {
-      const event: any = {
-      type: 'uploadAll',
-      url: 'your-path-to-backend-endpoint',
-      method: 'POST',
-      data: { foo: 'bar' },
-      };
-      this.files = [];
-      this.uploadInput.emit(event);
-  }
-
-  cancelUpload(id: string): void {
-      this.uploadInput.emit({ type: 'cancel' });
-  }
-
-  onUploadOutput(output: any): void {
-
-      if (output.type === 'allAddedToQueue') {
-      } else if (output.type === 'addedToQueue') {
-        this.files.push(output.file); // add file to array when added
-      } else if (output.type === 'uploading') {
-        // update current data in files array for uploading file
-        // const index = this.files.findIndex(file => file.id === output.file.id);
-        // this.files[index] = output.file;
-      } else if (output.type === 'removed') {
-        // remove file from array when removed
-        this.files = this.files.filter((file: File) => file !== output.file);
-      } else if (output.type === 'dragOver') {
-        this.dragOver = true;
-      } else if (output.type === 'dragOut') {
-      } else if (output.type === 'drop') {
-        this.dragOver = false;
-      }
-      this.showFiles();
-  }
-
-  // constructor(private fb: FormBuilder) { }
-
   ngOnInit() {
-    this.bootForm.controls.address.disable();
+    // this.bootForm.controls.chipType.disable();
     // this.bootForm.controls.serialNo.disable();
+  }
+  onFile(event: any) {
+    if (event.target.files && event.target.files[0]) {
+
+      const f: FileList = event.target.files;
+
+      this.bootFileHelp = `время файла: ${new Date(f[0].lastModified).toLocaleString()}
+                        размер файла: ${f[0].size}`;
+      const reader = new FileReader();
+
+      reader.onload = (e: any) => this.metatext = e.target.result;
+
+      reader.readAsDataURL(f[0]);
+    } else {
+
+      this.bootFileHelp = 'файл';
+
+      this.metatext = '';
+    }
   }
 
 }
