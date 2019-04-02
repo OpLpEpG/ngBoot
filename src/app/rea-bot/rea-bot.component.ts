@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {EventEmitter } from '@angular/core';
 import { FormArray, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { BootFileService } from '../boot-file.service';
 
 @Component({
   selector: 'app-rea-bot',
@@ -24,7 +25,8 @@ export class ReaBotComponent implements OnInit {
   }
 
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+              private bootFileServ: BootFileService) {
       this.bootForm = fb.group({
 
         bootFile: [ '',
@@ -55,17 +57,35 @@ export class ReaBotComponent implements OnInit {
     // this.bootForm.controls.serialNo.disable();
   }
   onFile(event: any) {
+
+    this.progress = 0;
+
     if (event.target.files && event.target.files[0]) {
 
       const f: FileList = event.target.files;
 
       this.bootFileHelp = `время файла: ${new Date(f[0].lastModified).toLocaleString()}
-                        размер файла: ${f[0].size}`;
-      const reader = new FileReader();
+                          размер файла: ${f[0].size}`;
 
-      reader.onload = (e: any) => this.metatext = e.target.result;
-
-      reader.readAsDataURL(f[0]);
+      const formData = new FormData();
+      // this.bootForm.
+      formData.append('bootfile', f[0]);
+      console.log((f[0] as File));
+      this.bootFileServ.parseBootfile(formData).subscribe(
+        progress => {
+          console.log(progress);
+          return this.progress = (progress && progress.value) || 0;
+        },
+        err => {
+          return this.metatext = err;
+        },
+        () => {
+          return this.progressName = 'end';
+        }
+      );
+      // const reader = new FileReader();
+      // reader.onload = (e: any) => this.metatext = e.target.result;
+      // reader.readAsDataURL(f[0]);
     } else {
 
       this.bootFileHelp = 'файл';

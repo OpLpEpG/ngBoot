@@ -5,6 +5,7 @@ import {ReactiveFormsModule, FormsModule} from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { ReaBotComponent } from './rea-bot/rea-bot.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,9 @@ import { ReaBotComponent } from './rea-bot/rea-bot.component';
   ],
   imports: [
     BrowserModule,
-    ReactiveFormsModule, FormsModule
+    ReactiveFormsModule,
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
