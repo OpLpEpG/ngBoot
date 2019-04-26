@@ -16,20 +16,22 @@ export class BootFileService {
       reportProgress: true,
       observe: 'events',
     })
-    .pipe(map((event) => {
+      .pipe(map((event) => {
 
-      switch (event.type) {
+        switch (event.type) {
 
-        case HttpEventType.UploadProgress:
-          const progress = event.loaded / event.total * 100;
-          return  {status: 'download', value: progress};
+          case HttpEventType.UploadProgress:
 
-        case HttpEventType.Response:
-          return event.body;
+            const progress = event.loaded / event.total * 100;
+            return { status: 'download', value: progress };
 
-        default:
-          return `Unhandled event: ${event.type}`;
-      }
-    }));
+          case HttpEventType.Response:
+            // console.log(`Response: ${JSON.stringify(event.body)}`);
+            return event.body;
+
+          default:
+            return `Unhandled event: ${event.type}`;
+        }
+      }));
   }
 }

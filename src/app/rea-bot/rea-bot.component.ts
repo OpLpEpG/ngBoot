@@ -70,18 +70,20 @@ export class ReaBotComponent implements OnInit {
       const formData = new FormData();
       // this.bootForm.
       formData.append('bootfile', f[0]);
+
       console.log((f[0] as File));
+
       this.bootFileServ.parseBootfile(formData).subscribe(
-        progress => {
-          console.log(progress);
-          return this.progress = (progress && progress.value) || 0;
+        next => {
+          console.log(`progress`);
+          console.log(next);
+          this.progress = (next && next.value) || 0;
+          if (next && next.name) { this.metatext = JSON.stringify(next); }
         },
         err => {
-          return this.metatext = err;
+           this.metatext = JSON.stringify(err);
         },
-        () => {
-          return this.progressName = 'end';
-        }
+        () => this.progressName = 'end'
       );
       // const reader = new FileReader();
       // reader.onload = (e: any) => this.metatext = e.target.result;
