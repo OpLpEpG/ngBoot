@@ -6,6 +6,8 @@ import {ReactiveFormsModule, FormsModule} from '@angular/forms';
 import { AppComponent } from './app.component';
 import { ReaBotComponent } from './rea-bot/rea-bot.component';
 import { HttpClientModule } from '@angular/common/http';
+import { ChipService } from './chip.service';
+import { BootFileService } from './boot-file.service';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,7 @@ import { HttpClientModule } from '@angular/common/http';
     FormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [ChipService, BootFileService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

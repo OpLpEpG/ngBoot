@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {EventEmitter } from '@angular/core';
 import { FormArray, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BootFileService } from '../boot-file.service';
+import { ChipService } from '../chip.service';
 
 @Component({
   selector: 'app-rea-bot',
@@ -15,6 +16,7 @@ export class ReaBotComponent implements OnInit {
   bootFileHelp = 'bootFileHelp: string';
   metatext: string;
   progressName = 'pn';
+
   get progress() {
     return this.bootForm.controls.progressData.value;
   }
@@ -26,13 +28,14 @@ export class ReaBotComponent implements OnInit {
 
 
   constructor(private fb: FormBuilder,
-              private bootFileServ: BootFileService) {
+              private bootFileServ: BootFileService,
+              private chipSrv: ChipService) {
       this.bootForm = fb.group({
 
         bootFile: [ '',
           [Validators.required]],
 
-        address:  [{value: 3, disabled: true},
+        address:  [{value: 3, disabled: false},
           [Validators.required,
           Validators.min(1),
           Validators.max(16)]],
@@ -47,9 +50,9 @@ export class ReaBotComponent implements OnInit {
             Validators.min(0),
             Validators.max(100)]],
 
-        chipType: [{value: 'ATmega8', disabled: true},
+        chipType: [{value: chipSrv.getCips()[0], disabled: false},
           [Validators.required]],
-        chipTypeData: this.fb.array(['ATmega8', 'ATMega164', 'ATMega664', 'STM32F1', 'STM32F4']),
+        chipTypeData: this.fb.array(chipSrv.getCips()),
       });
   }
   ngOnInit() {
