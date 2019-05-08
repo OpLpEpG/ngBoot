@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import {EventEmitter } from '@angular/core';
+import { EventEmitter } from '@angular/core';
 import { FormArray, FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BootFileService } from '../boot-file.service';
 import { ChipService } from '../chip.service';
+import { IParseBootFile, isParseBootFile } from '../../../../types/DTOparseBootFileRes';
+import { ProgrammService } from '../programm.service';
 
 @Component({
   selector: 'app-rea-bot',
@@ -11,11 +13,7 @@ import { ChipService } from '../chip.service';
 })
 export class ReaBotComponent implements OnInit {
 
-  public bootForm: FormGroup;
-  div1 =  true;
-  bootFileHelp = 'bootFileHelp: string';
-  metatext: string;
-  progressName = 'pn';
+  button: any;
 
   get progress() {
     return this.bootForm.controls.progressData.value;
@@ -29,36 +27,60 @@ export class ReaBotComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
               private bootFileServ: BootFileService,
-              private chipSrv: ChipService) {
-      this.bootForm = fb.group({
+              private chipSrv: ChipService,
+              private programm: ProgrammService) {
 
-        bootFile: [ '',
-          [Validators.required]],
 
-        address:  [{value: 3, disabled: false},
-          [Validators.required,
-          Validators.min(1),
-          Validators.max(16)]],
+    this.bootForm = fb.group({
 
-        serialNo: [{value: 1, disabled: false},
-          [Validators.required,
-          Validators.min(1),
-          Validators.max(0xFFFF)]],
+      bootFile: ['',
+        [Validators.required]],
 
-          progressData: [{value: 1, disabled: false},
-            [Validators.required,
-            Validators.min(0),
-            Validators.max(100)]],
+      address: [{ value: 3, disabled: true },
+      [Validators.required,
+      Validators.min(1),
+      Validators.max(16)]],
 
-        chipType: [{value: chipSrv.getCips()[0], disabled: false},
-          [Validators.required]],
-        chipTypeData: this.fb.array(chipSrv.getCips()),
-      });
+      serialNo: [{ value: 1, disabled: false },
+      [Validators.required,
+      Validators.min(1),
+      Validators.max(0xFFFF)]],
+
+      progressData: [{ value: 0, disabled: false },
+      [Validators.required,
+      Validators.min(0),
+      Validators.max(100)]],
+
+      chipType: [{ value: chipSrv.getCips()[0], disabled: true },
+      [Validators.required]],
+      chipTypeData: this.fb.array(chipSrv.getCips()),
+
+    });
   }
+
+  public bootForm: FormGroup;
+  div1 = true;
+  bootFileHelp = 'bootFileHelp: string';
+  metatext: string;
+  progressName = 'pn';
+
+  cantProgrf = true;
+
+  cantProgr(): boolean { return this.cantProgrf; }
+
   ngOnInit() {
     // this.bootForm.controls.chipType.disable();
     // this.bootForm.controls.serialNo.disable();
   }
+  onProg(event: any) {
+    this.programm.programm().subscribe(
+      next => {
+        console.log(`progr ${next}`);
+      }
+    );
+
+  }
+
   onFile(event: any) {
 
     this.progress = 0;
@@ -76,15 +98,30 @@ export class ReaBotComponent implements OnInit {
 
       console.log((f[0] as File));
 
+      this.bootForm.controls.address.enable();
+      this.bootForm.controls.chipType.enable();
+      // this.bootForm.controls.programm.disable();
+
+
       this.bootFileServ.parseBootfile(formData).subscribe(
         next => {
           console.log(`progress`);
           console.log(next);
           this.progress = (next && next.value) || 0;
-          if (next && next.name) { this.metatext = JSON.stringify(next); }
+          if (next && isParseBootFile(next)) {
+            const m = next as IParseBootFile;
+            this.metatext = JSON.stringify(m);
+            this.bootForm.controls.address.setValue(m.addr);
+            this.bootForm.controls.address.disable();
+            this.bootForm.controls.serialNo.setValue(m.serial || 1);
+            this.bootForm.controls.chipType.setValue((m.chip && m.chip.name) || this.chipSrv.getCips()[0]);
+            if (m.chip) { this.bootForm.controls.chipType.disable(); }
+            this.cantProgrf = false;
+            // this.bootForm.controls.programm.enable();
+          }
         },
         err => {
-           this.metatext = JSON.stringify(err);
+          this.metatext = JSON.stringify(err);
         },
         () => this.progressName = 'end'
       );

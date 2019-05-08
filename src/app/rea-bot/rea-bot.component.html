@@ -1,66 +1,64 @@
-
 <form [formGroup]="bootForm" class="container">
 
-    <div >
-        <label for="bootFile" >Выберите файл программы (*.bin)</label>
-        <input  type="file"
-        class="form-control-file"
-              id="bootFile"
-              formControlName="bootFile"
-              aria-describedby="fileHelpId"
-              (change)= "onFile($event)">
-        <small id="fileHelpId" class="form-text text-muted">{{bootFileHelp}}</small>
-        <hr>
+  <div>
+    <label for="bootFile">Выберите файл программы (*.bin)</label>
+    <input type="file" class="form-control-file" id="bootFile" formControlName="bootFile" aria-describedby="fileHelpId"
+      (change)="onFile($event)">
+    <small id="fileHelpId" class="form-text text-muted">{{bootFileHelp}}</small>
+    <hr>
+  </div>
+
+  <div class="form-group row" *ngIf="div1">
+    <label for="address" class="col-sm-3 col-form-label">Адрес прибора</label>
+    <div class="col-sm">
+      <input type="number" class="form-control" id="address" formControlName="address" />
+    </div>
+  </div>
+  <!-- <small id="bootFileHelpId" class="form-text text-muted">{{bootFileHelp}}</small> -->
+
+  <div class="form-group row">
+    <label for="serialNo" class="col-sm-3 col-form-label">Серийный номер</label>
+    <div class="col-sm">
+      <input #serNo type="number" class="form-control" id="serialNo" formControlName="serialNo"/>
+      <!-- (change)="progress=serNo.value"  -->
+    </div>
+  </div>
+
+  <div class="form-group" class="form-group row">
+    <label for="chipType" class="col-sm-3 col-form-label">Процессор</label>
+    <div class="col-sm">
+      <select class="form-control" formControlName="chipType" id="chipType">
+        <option *ngFor="let chipTypeitem of bootForm.controls['chipTypeData'].controls">{{chipTypeitem.value}}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="metatext">Файл</label>
+    <textarea class="form-control" name="metatext" id="metatext" rows="3">{{metatext}}</textarea>
+  </div>
+
+  <hr>
+  <!-- [style.margin-bottom.rem]="0.5" -->
+  <label for="ress">Прогресс: {{progressName}}</label>
+  <div class="progress">
+    <div class="progress-bar" role="progressbar" id="ress" [style.width.%]="progress" aria-valuenow="progress"
+      aria-valuemin="0" aria-valuemax="100">{{progress}}%</div>
+  </div>
+  <!-- <select [formControl]="chipType" id ="chipType" ></select> -->
+  <!-- <button type="submit">отправить</button> -->
+  <hr>
+
+
+    <div class="list-group">
+      <!-- <button id="b1" type="button" class="list-group-item list-group-item-action" [disabled]="cantProgrf">Programm</button> -->
+      <!-- <button id="b2" type="button" class="list-group-item list-group-item-action" [disabled]="cantProgr()">Terminate</button> -->
+      <button id="programm" type="button"
+      class="list-group-item list-group-item-action"
+      [disabled]="cantProgr()"
+      (click)="onProg()">Programm</button>
     </div>
 
-    <div class="form-group row" *ngIf="div1">
-        <label for="address" class="col-sm-3 col-form-label">Адрес прибора</label>
-      <div class="col-sm">
-        <input type="number"
-             class="form-control"
-             id="address"
-             formControlName="address"/>
-      </div>
-      </div>
-      <!-- <small id="bootFileHelpId" class="form-text text-muted">{{bootFileHelp}}</small> -->
-
-      <div class="form-group row">
-        <label for="serialNo"class="col-sm-3 col-form-label">Серийный номер</label>
-        <div class="col-sm">
-        <input #serNo type="number"
-             class="form-control"
-             id="serialNo"
-             formControlName="serialNo"
-             (change)= "progress=serNo.value"  />
-        </div>
-      </div>
-
-        <div class="form-group" class="form-group row">
-          <label for="chipType" class="col-sm-3 col-form-label">Процессор</label>
-          <div class="col-sm">
-            <select class="form-control" formControlName="chipType" id="chipType">
-                <option *ngFor="let chipTypeitem of bootForm.controls['chipTypeData'].controls">{{chipTypeitem.value}}</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="metatext">Файл</label>
-          <textarea class="form-control" name="metatext" charset="windows-1251" id="metatext" rows="3">{{metatext}}</textarea>
-        </div>
-
-        <hr>
-        <!-- [style.margin-bottom.rem]="0.5" -->
-        <label for="ress">Прогресс: {{progressName}}</label>
-        <div class="progress">
-            <div class="progress-bar" role="progressbar" id="ress"
-            [style.width.%]="progress"
-            aria-valuenow = "progress"
-            aria-valuemin="0"
-            aria-valuemax="100">{{progress}}%</div>
-        </div>
-    <!-- <select [formControl]="chipType" id ="chipType" ></select> -->
-  <!-- <button type="submit">отправить</button> -->
   <hr>
   <div class="form-text text-muted">
     <p>
@@ -72,7 +70,7 @@
     <p>
       address: {{bootForm.controls['address'].value}}
     </p>
-    </div>
+  </div>
 
 
 </form>
