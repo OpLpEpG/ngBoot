@@ -6,6 +6,7 @@ import { ChipService } from '../chip.service';
 import { IParseBootFile, isParseBootFile } from '../../../../types/DTOparseBootFileRes';
 import { ProgrammService } from '../programm.service';
 
+
 @Component({
   selector: 'app-rea-bot',
   templateUrl: './rea-bot.component.html',
@@ -72,11 +73,14 @@ export class ReaBotComponent implements OnInit {
     // this.bootForm.controls.chipType.disable();
     // this.bootForm.controls.serialNo.disable();
   }
-  onProg(event: any) {
+  onProg() {
     this.programm.programm().subscribe(
       next => {
         console.log(`progr ${next}`);
-      }
+      },
+      err => {
+        console.log(`progr ${err}`);
+      },
     );
 
   }
